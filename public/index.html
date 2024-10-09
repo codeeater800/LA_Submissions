@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Little Artist Submissions</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Little Artist Submissions</h1>
+      <div id="step1">
+        <label for="email">Enter your registered email:</label>
+        <input
+          type="email"
+          id="email"
+          placeholder="example@email.com"
+          required
+        />
+        <button id="emailSubmit">Submit</button>
+        <p id="emailError" class="error-message"></p>
+      </div>
+
+      <div id="step2" class="hidden">
+        <h2>Uploading for '<span id="childName"></span>'</h2>
+        <div id="dragDropArea">
+          <p>
+            Drag & drop your image here, or
+            <span class="browse-files">browse files</span>
+          </p>
+          <input type="file" id="fileInput" accept="image/*" />
+        </div>
+        <div id="previewContainer" class="hidden">
+          <h3>Preview:</h3>
+          <img id="preview" src="" alt="Image preview" />
+          <button id="confirmUpload">Confirm Upload</button>
+        </div>
+        <p id="uploadError" class="error-message"></p>
+      </div>
+
+      <div id="confirmation" class="hidden">
+        <h2>Upload complete! Thank you!</h2>
+      </div>
+    </div>
+
+    <script src="js/script.js"></script>
+  </body>
+</html>

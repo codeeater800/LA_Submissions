@@ -1,0 +1,118 @@
+/* General page styling */
+body {
+  font-family: "Open Sans", sans-serif;
+  background-color: #824cad;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  background-color: white;
+  padding: 40px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  text-align: center;
+  max-width: 800px; /* Increased size */
+  width: 100%;
+}
+
+h1,
+h2 {
+  color: #4a90e2;
+  font-weight: 600;
+}
+
+/* Form field styling */
+label,
+input,
+button {
+  display: block;
+  margin: 10px 0;
+  width: 100%;
+}
+
+input[type="email"] {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+button {
+  padding: 10px;
+  width: 60%; /* Reduced size */
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 20px auto;
+}
+
+button:hover {
+  background-color: #357abd;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid #ccc;
+  margin-top: 10px;
+}
+
+.hidden {
+  display: none;
+}
+
+.error-message {
+  color: red;
+  font-size: 14px;
+}
+
+/* Drag and drop area styling */
+#dragDropArea {
+  border: 2px dashed #ccc;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  position: relative;
+}
+
+#dragDropArea p {
+  margin: 0;
+  font-size: 16px;
+}
+
+#dragDropArea input[type="file"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.browse-files {
+  color: #4a90e2;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Preview area styling */
+#previewContainer {
+  margin-top: 20px;
+}
+
+/* Center the elements */
+.container input,
+.container button,
+#dragDropArea {
+  margin-left: auto;
+  margin-right: auto;
+}
