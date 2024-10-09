@@ -10,13 +10,34 @@ const PORT = process.env.PORT || 3000;
 // Middleware to serve static files
 app.use(express.static("public"));
 
-// Set up Multer for file uploads
+// Set up Multer for file uploads, will dynamically rename file using child's name
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "public/uploads");
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
+    const email = req.body.email; // Expect email to be sent with the file upload form
+    let childName = "";
+
+    // Read the CSV to find the child's name associated with the email
+    fs.createReadStream("data/image-ref-registrations.csv")
+      .pipe(csv())
+      .on("data", (data) => {
+        if (data.Email === email) {
+          childName = data["Child Name"];
+        }
+      })
+      .on("end", () => {
+        if (childName) {
+          const safeChildName = childName.replace(/\s+/g, "_"); // Make the name URL-safe by replacing spaces
+          const fileName = `Painted_by_${safeChildName}${path.extname(
+            file.originalname
+          )}`; // E.g., Painted_by_John_Jacobs.jpg
+          cb(null, fileName);
+        } else {
+          cb(new Error("Child name not found"));
+        }
+      });
   },
 });
 const upload = multer({ storage, limits: { fileSize: 4 * 1024 * 1024 } });
@@ -54,7 +75,7 @@ app.post("/upload-image", upload.single("file"), (req, res) => {
   res.status(200).json({ success: true });
 });
 
-// New route for the admin gallery page
+// Updated admin page route to display filenames as captions
 app.get("/admin-little-artist-submissions", (req, res) => {
   const uploadDir = path.join(__dirname, "public/uploads");
 
@@ -101,6 +122,9 @@ app.get("/admin-little-artist-submissions", (req, res) => {
                         padding: 20px;
                         width: 90%;
                     }
+                    .gallery-item {
+                        text-align: center;
+                    }
                     .gallery img {
                         width: 100%;
                         height: auto;
@@ -108,15 +132,26 @@ app.get("/admin-little-artist-submissions", (req, res) => {
                         border-radius: 10px;
                         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
                     }
+                    .caption {
+                        margin-top: 5px;
+                        font-size: 14px;
+                        color: #333;
+                    }
                 </style>
             </head>
             <body>
-                <h1>Uploaded Art Gallery</h1>
+                <h1>Little Artist - Art Gallery</h1>
                 <div class="gallery">
                     ${imageFiles
                       .map(
-                        (file) =>
-                          `<img src="/uploads/${file}" alt="Uploaded Image">`
+                        (file) => `
+                        <div class="gallery-item">
+                            <img src="/uploads/${file}" alt="Uploaded Image">
+                            <div class="caption">${file
+                              .replace(/_/g, " ")
+                              .replace(/\.[^/.]+$/, "")}</div>
+                        </div>
+                    `
                       )
                       .join("")}
                 </div>
