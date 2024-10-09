@@ -23,16 +23,21 @@ const storage = multer.diskStorage({
     fs.createReadStream("data/image-ref-registrations.csv")
       .pipe(csv())
       .on("data", (data) => {
-        if (data.Email === email) {
+        console.log(data); // Log the data to ensure the CSV is being read correctly
+        console.log(`Email in CSV: ${data.Email}`);
+        console.log(`Email being checked: ${email}`);
+
+        // Use trim and toLowerCase for case-insensitive and whitespace-tolerant comparison
+        if (data.Email.trim().toLowerCase() === email.trim().toLowerCase()) {
           childName = data["Child Name"];
         }
       })
       .on("end", () => {
         if (childName) {
-          const safeChildName = childName.replace(/\s+/g, "_"); // Make the name URL-safe by replacing spaces
+          const safeChildName = childName.replace(/\s+/g, "_");
           const fileName = `Painted_by_${safeChildName}${path.extname(
             file.originalname
-          )}`; // E.g., Painted_by_John_Jacobs.jpg
+          )}`;
           cb(null, fileName);
         } else {
           cb(new Error("Child name not found"));
