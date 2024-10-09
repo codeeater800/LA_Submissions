@@ -10,41 +10,18 @@ const PORT = process.env.PORT || 3000;
 // Middleware to serve static files
 app.use(express.static("public"));
 
-// Set up Multer for file uploads, will dynamically rename file using child's name
+// Set up Multer for file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "public/uploads");
   },
   filename: (req, file, cb) => {
-    const email = req.body.email; // Expect email to be sent with the file upload form
-    let childName = "";
-
-    // Read the CSV to find the child's name associated with the email
-    fs.createReadStream("data/image-ref-registrations.csv")
-      .pipe(csv())
-      .on("data", (data) => {
-        console.log(data); // Log the data to ensure the CSV is being read correctly
-        console.log(`Email in CSV: ${data.Email}`);
-        console.log(`Email being checked: ${email}`);
-
-        // Use trim and toLowerCase for case-insensitive and whitespace-tolerant comparison
-        if (data.Email.trim().toLowerCase() === email.trim().toLowerCase()) {
-          childName = data["Child Name"];
-        }
-      })
-      .on("end", () => {
-        if (childName) {
-          const safeChildName = childName.replace(/\s+/g, "_");
-          const fileName = `Painted_by_${safeChildName}${path.extname(
-            file.originalname
-          )}`;
-          cb(null, fileName);
-        } else {
-          cb(new Error("Child name not found"));
-        }
-      });
+    const uniqueNumber = Date.now(); // Revert back to using just a unique number
+    const fileName = `${uniqueNumber}${path.extname(file.originalname)}`; // Example: 1728453239334.jpg
+    cb(null, fileName);
   },
 });
+
 const upload = multer({ storage, limits: { fileSize: 4 * 1024 * 1024 } });
 
 // Endpoint to check email in CSV
@@ -57,7 +34,10 @@ app.get("/check-email", (req, res) => {
     .pipe(csv())
     .on("data", (data) => results.push(data))
     .on("end", () => {
-      const matchedEntries = results.filter((entry) => entry.Email === email);
+      const matchedEntries = results.filter(
+        (entry) =>
+          entry.Email.trim().toLowerCase() === email.trim().toLowerCase()
+      );
       if (matchedEntries.length > 0) {
         registrationFound = true;
         res.json({ success: true, childName: matchedEntries[0]["Child Name"] });
@@ -80,7 +60,7 @@ app.post("/upload-image", upload.single("file"), (req, res) => {
   res.status(200).json({ success: true });
 });
 
-// Updated admin page route to display filenames as captions
+// Admin page for viewing gallery
 app.get("/admin-little-artist-submissions", (req, res) => {
   const uploadDir = path.join(__dirname, "public/uploads");
 
@@ -152,9 +132,7 @@ app.get("/admin-little-artist-submissions", (req, res) => {
                         (file) => `
                         <div class="gallery-item">
                             <img src="/uploads/${file}" alt="Uploaded Image">
-                            <div class="caption">${file
-                              .replace(/_/g, " ")
-                              .replace(/\.[^/.]+$/, "")}</div>
+                            <div class="caption">${file}</div> <!-- Display the filename as the caption -->
                         </div>
                     `
                       )
