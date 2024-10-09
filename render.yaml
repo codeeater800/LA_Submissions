@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: little-artist-submissions
+    env: node
+    plan: free
+    buildCommand: 'npm install'
+    startCommand: 'node server.js'
