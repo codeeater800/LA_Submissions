@@ -26,7 +26,7 @@ document.getElementById("emailSubmit").addEventListener("click", async () => {
   } catch (error) {
     console.error("Error:", error.message);
     document.getElementById("emailError").innerText =
-      "Invalid email or server error.";
+      "Looks like this email was previously used to submit. Please try again with your correct email. If this is a mistake, please contact admin.";
   }
 });
 
