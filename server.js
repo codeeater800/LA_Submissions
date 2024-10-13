@@ -3,6 +3,7 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 const csv = require("csv-parser");
+const createCsvWriter = require("csv-writer").createObjectCsvWriter;
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -19,20 +20,7 @@ const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     let categoryDir = "public/uploads";
 
-    // Set directory based on the previously saved age category
-    if (latestAgeCategory === "category1") {
-      categoryDir = "public/uploads/category1";
-    } else if (latestAgeCategory === "category2") {
-      categoryDir = "public/uploads/category2";
-    } else if (latestAgeCategory === "category3") {
-      categoryDir = "public/uploads/category3";
-    }
-
-    // Ensure the directory exists before saving the file
-    if (!fs.existsSync(categoryDir)) {
-      fs.mkdirSync(categoryDir, { recursive: true });
-    }
-
+    // Use a default category initially, this will be updated in the route
     cb(null, categoryDir);
   },
   filename: (req, file, cb) => {
@@ -44,25 +32,76 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-// Endpoint to check email and fetch child's name and age
+// Function to write updated CSV data
+function updateCSV(data) {
+  const csvWriter = createCsvWriter({
+    path: "data/image-ref-registrations.csv",
+    header: [
+      { id: "Child Name", title: "Child Name" },
+      { id: "Parent Name", title: "Parent Name" },
+      { id: "Date of Birth", title: "Date of Birth" },
+      { id: "Age", title: "Age" },
+      { id: "Gender", title: "Gender" },
+      { id: "Education Board", title: "Education Board" },
+      { id: "Grade", title: "Grade" },
+      { id: "Section", title: "Section" },
+      { id: "Country Code", title: "Country Code" },
+      { id: "Phone Number", title: "Phone Number" },
+      { id: "Email", title: "Email" },
+      { id: "Registration ID", title: "Registration ID" },
+      { id: "Submission-Status", title: "Submission-Status" },
+    ],
+  });
+
+  return csvWriter.writeRecords(data); // Returns a promise
+}
+
+// Endpoint to check email and fetch all children associated with the email
 app.get("/check-email", (req, res) => {
   const email = req.query.email;
-  let registrationFound = false;
-
   const results = [];
+
+  // Logging the input email
+  console.log(`User inputted email: ${email}`);
+
   fs.createReadStream("data/image-ref-registrations.csv")
     .pipe(csv())
     .on("data", (data) => results.push(data))
     .on("end", () => {
+      // Filter out all children associated with the email
       const matchedEntries = results.filter(
         (entry) =>
           entry.Email.trim().toLowerCase() === email.trim().toLowerCase()
       );
+
       if (matchedEntries.length > 0) {
-        registrationFound = true;
-        const childName = matchedEntries[0]["Child Name"];
-        const age = matchedEntries[0]["Age"]; // Fetch the age as well
-        res.json({ success: true, childName, age });
+        // If there are multiple children, return all of them along with their submission status
+        const children = matchedEntries.map((entry) => ({
+          childName: entry["Child Name"],
+          age: entry["Age"],
+          status: entry["Submission-Status"],
+        }));
+
+        const pendingEntries = children.filter(
+          (child) => child.status === "Pending"
+        );
+
+        // Logging all child names and ages
+        const childrenLog = children
+          .map((child) => `${child.childName} (Age: ${child.age})`)
+          .join(", ");
+        console.log(`Email registered successfully, Children: ${childrenLog}`);
+
+        if (pendingEntries.length === 0) {
+          // If all children have "Done" status, prevent further uploads
+          res.json({
+            success: false,
+            message:
+              "Looks like a submission has already been made for this email ID.",
+          });
+        } else {
+          res.json({ success: true, children });
+        }
       } else {
         res.json({
           success: false,
@@ -75,6 +114,13 @@ app.get("/check-email", (req, res) => {
 // Endpoint to upload image with age information
 app.post("/upload-image", (req, res) => {
   upload.single("file")(req, res, function (err) {
+    if (req.file) {
+      console.log(
+        `File upload attempted: Name: ${req.file.originalname}, Size: ${req.file.size} bytes, Type: ${req.file.mimetype}`
+      );
+    } else {
+      console.log("No file uploaded.");
+    }
     if (err instanceof multer.MulterError) {
       return res.status(500).json({ error: err.message });
     } else if (err) {
@@ -83,15 +129,86 @@ app.post("/upload-image", (req, res) => {
         .json({ error: "An error occurred during the upload." });
     }
 
-    console.log("Request body:", req.body); // Log the entire body to see what fields are received
+    const childName = req.body.childName; // Get child name from form data
+    const emailID = req.body.email; // Get email from form data
     const age = parseInt(req.body.age, 10); // Get age from the form data
-    console.log("Received age:", age);
+    let categoryDir = "public/uploads"; // Default directory
 
-    if (isNaN(age)) {
-      return res.status(400).json({ error: "Invalid age provided" });
+    // Log email to verify it's being passed correctly
+    console.log("Email ID received:", emailID);
+
+    name = "email";
+
+    // Determine the category based on the age
+    if (age >= 5 && age <= 8) {
+      categoryDir = "public/uploads/category1";
+    } else if (age >= 9 && age <= 12) {
+      categoryDir = "public/uploads/category2";
+    } else if (age >= 13 && age <= 15) {
+      categoryDir = "public/uploads/category3";
+    }
+    
+
+    // Log the calculated category for debugging
+    console.log(
+      `Calculated category group based on age ${age}: ${categoryDir}`
+    );
+    console.log(`Age: ${age} mapped to category directory: ${categoryDir}`);
+
+    // Ensure the directory exists before moving the file
+    if (!fs.existsSync(categoryDir)) {
+      fs.mkdirSync(categoryDir, { recursive: true });
     }
 
-    res.status(200).json({ success: true });
+    // Create a file name in the format "<childName> <-> <emailID><extension>" without any sanitization
+    const fileExtension = path.extname(req.file.originalname); // Get the file extension
+    const newFileName = `${childName} - ${emailID}${fileExtension}`; // Use the raw child name and email for the file name
+
+    // Move the file to the correct directory based on age category
+    const oldPath = req.file.path;
+    const newPath = path.join(__dirname, categoryDir, newFileName);
+    fs.rename(oldPath, newPath, function (err) {
+      if (err) {
+        return res.status(500).json({ error: "Failed to move the file." });
+      }
+
+      // Logging the file upload path
+      console.log(`Upload successful: ${newPath}`);
+
+      // Now update the CSV file for submission status
+      const results = [];
+      fs.createReadStream("data/image-ref-registrations.csv")
+        .pipe(csv())
+        .on("data", (data) => results.push(data))
+        .on("end", () => {
+          // Find the entry for the child and mark the submission as "Done"
+          const updatedResults = results.map((entry) => {
+            if (
+              entry["Child Name"].trim().toLowerCase() ===
+              childName.trim().toLowerCase()
+            ) {
+              return { ...entry, "Submission-Status": "Done" };
+            }
+            return entry;
+          });
+
+          // Write the updated data back to the CSV
+          updateCSV(updatedResults)
+            .then(() => {
+              console.log(
+                "CSV updated successfully. Submission status set to 'Done'."
+              );
+              console.log("Upload process completed successfully.");
+
+              res.status(200).json({ success: true });
+            })
+            .catch((error) => {
+              res
+                .status(500)
+                .json({ error: "Failed to update submission status." });
+            });
+        });
+    });
   });
 });
 
@@ -108,11 +225,18 @@ app.get("/admin-little-artist-submissions", (req, res) => {
 
     const imageFiles = files.filter(
       (file) =>
-        file.endsWith(".png") ||
-        file.endsWith(".jpg") ||
-        file.endsWith(".jpeg") ||
-        file.endsWith(".gif")
+        file.endsWith(".png") || file.endsWith(".jpg") || file.endsWith(".jpeg")
     );
+
+    const imagesWithCaptions = imageFiles.map((file) => {
+      const [childNameEmail, extension] = file.split(".");
+      const [childName, emailID] = childNameEmail.split("-"); // Split filename to get childName and emailID
+
+      // Format the caption
+      const caption = `Painted by ${childName}, Email: ${emailID}`;
+
+      return { file, caption };
+    });
 
     res.send(`
             <!DOCTYPE html>
@@ -135,6 +259,13 @@ app.get("/admin-little-artist-submissions", (req, res) => {
                     h1 {
                         color: #4a90e2;
                         margin-top: 20px;
+                        position: sticky;
+                        top: 0;
+                        background-color: white;
+                        padding: 10px 0;
+                        width: 100%;
+                        text-align: center;
+                        z-index: 999;
                     }
                     .gallery {
                         display: grid;
@@ -152,17 +283,55 @@ app.get("/admin-little-artist-submissions", (req, res) => {
                         border: 2px solid #ddd;
                         border-radius: 10px;
                         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                        cursor: pointer;
                     }
                     .caption {
                         margin-top: 5px;
                         font-size: 14px;
                         color: #333;
                     }
+                    /* Modal styles */
+                    .modal {
+                        display: none;
+                        position: fixed;
+                        z-index: 1000;
+                        left: 0;
+                        top: 0;
+                        width: 100%;
+                        height: 100%;
+                        background-color: rgba(0, 0, 0, 0.8);
+                        justify-content: center;
+                        align-items: center;
+                    }
+                    .modal-content {
+                        position: relative;
+                        max-width: 90%;
+                        max-height: 90%;
+                        background-color: #fff;
+                        padding: 10px;
+                        border-radius: 10px;
+                        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+                    }
+                    .modal-content img {
+                        max-width: 100%;
+                        max-height: 100%;
+                    }
+                    /* Close button */
+                    .close-btn {
+                        position: absolute;
+                        top: 10px;
+                        right: 20px;
+                        font-size: 24px;
+                        color: #fff;
+                        cursor: pointer;
+                        font-weight: bold;
+                    }
+                    /* Sticky dropdown container */
                     .dropdown-container {
                         position: sticky;
-                        top: 0;
+                        top: 60px; /* Adjust this based on the height of the title */
                         background-color: white;
-                        z-index: 1;
+                        z-index: 999;
                         padding: 20px;
                         width: 90%;
                         text-align: center;
@@ -192,19 +361,49 @@ app.get("/admin-little-artist-submissions", (req, res) => {
                     </select>
                 </div>
                 <div class="gallery">
-                    ${imageFiles
+                    ${imagesWithCaptions
                       .map(
-                        (file) => `
+                        (image) => `
                         <div class="gallery-item">
-                            <img src="/uploads/${ageGroup}/${file}" alt="Uploaded Image">
-                            <div class="caption">${file}</div>
+                            <img src="/uploads/${ageGroup}/${image.file}" alt="Uploaded Image" onclick="openModal(this.src)">
+                            <div class="caption">${image.caption}</div>
                         </div>
                     `
                       )
                       .join("")}
                 </div>
+
+                <!-- Modal for enlarged image -->
+                <div id="imageModal" class="modal" onclick="closeModal(event)">
+                    <span class="close-btn" onclick="closeModal(event)">×</span>
+                    <div class="modal-content">
+                        <img id="modalImage" src="" alt="Enlarged Image">
+                    </div>
+                </div>
+
+                <script>
+                    // Function to open the modal and display the image
+                    function openModal(imageSrc) {
+                        const modal = document.getElementById("imageModal");
+                        const modalImage = document.getElementById("modalImage");
+                        modal.style.display = "flex";
+                        modalImage.src = imageSrc;
+                    }
+
+                    // Function to close the modal
+                    function closeModal(event) {
+                        const modal = document.getElementById("imageModal");
+
+                        // Close modal if close button or outside area is clicked
+                        if (event.target.classList.contains("modal") || event.target.classList.contains("close-btn")) {
+                            modal.style.display = "none";
+                        }
+                    }
+                </script>
             </body>
             </html>
+
+
         `);
   });
 });
