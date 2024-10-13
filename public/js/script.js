@@ -7,7 +7,10 @@ document.getElementById("emailSubmit").addEventListener("click", async () => {
   if (result.success) {
     document.getElementById("step1").classList.add("hidden");
     document.getElementById("step2").classList.remove("hidden");
-    document.getElementById("childName").innerText = result.childName; // Display the child's name without quotes
+
+    const childNameElement = document.getElementById("childName");
+    childNameElement.innerText = result.childName; // Display the child's name
+    childNameElement.setAttribute("data-age", result.age); // Store the age as a data attribute
   } else {
     document.getElementById("emailError").innerText = result.message;
   }
@@ -55,9 +58,15 @@ document.getElementById("confirmUpload").addEventListener("click", async () => {
   const formData = new FormData();
   formData.append("file", fileInput.files[0]);
 
-  // Add the child's name to the form data
-  const childName = document.getElementById("childName").innerText.trim(); // Ensure it is properly trimmed and no extra spaces
-  formData.append("childName", childName); // Pass the child's name as part of the form data
+  // Add the child's name and age to the form data
+  const childName = document.getElementById("childName").innerText.trim();
+  const age = document.getElementById("childName").getAttribute("data-age"); // Get the stored age
+
+  console.log("Child Name:", childName);
+  console.log("Age:", age); // Log the age to ensure it is correct
+
+  formData.append("childName", childName);
+  formData.append("age", age); // Append the age to the form data
 
   const response = await fetch("/upload-image", {
     method: "POST",
