@@ -1,31 +1,32 @@
 Child Name,Parent Name,Date of Birth,Age,Gender,Education Board,Grade,Section,Country Code,Phone Number,Email,Registration ID,Submission-Status
-John,Doe,2016-02-02,8,male,SSLC,2,A,91,9999899998,hi@gmail.com,919999899998,Pending
-Adam,Gilchrist,2012-02-02,12,male,ICSE,2,A,63,9988766765,adam@gmail.com,639988766765,Pending
+John,Doe,2016-02-02,8,male,SSLC,2,A,91,9999899998,hi@gmail.com,919999899998,Done
+Adam,Gilchrist,2012-02-02,12,male,ICSE,2,A,63,9988766765,adam@gmail.com,639988766765,Done
 Genessa Caltin,Rupa L,2016-02-12,8,female,ICSE,3,C,91,9900112912,rupa.caltin@gmail.com,919900112912,Pending
 Joanna Anson,Swapna varghese,2012-08-31,12,female,ICSE,7,A,91,9379632227,swapnaanson@gmail.com,919379632227,Pending
-Bhoovi S Baadkar,Suraj R Baadkar,2012-02-17,12,female,ICSE,7,B,91,9902284442,meerabadkar@gmail.com,919902284442,Pending
+Bhoovi S Baadkar,Suraj R Baadkar,2012-02-17,12,female,ICSE,7,B,91,9902284442,meerabadkar@gmail.com,919902284442,Done
 Sherlin andriya thomas,Thomas s,2013-05-14,11,female,OTHR,6,A,91,9513333923,thomastom309@gmail.com,919513333923,Pending
 Amelia Lenora Philips,Philips Leonard,2012-04-21,12,female,ICSE,7,A,91,9880872419,pamila_stanley@yahoomail.com,919880872419,Pending
 Glenn Lemuel Philips,Philips Leonard,2010-09-13,14,male,ICSE,8,G,91,9880872419,pamila_stanley@yahoomail.com,919880872419,Pending
 NATALIA SHARIS,RICHARD,2011-01-29,13,female,ICSE,8,d,91,9008338552,rekharichard2708@gmail.com,919008338552,Pending
-Charan chinni,Rameshbabu chinni,2013-01-18,11,male,CBSE,7,C,India,9980530033,ramesh.chinni@gmail.com,India09980530033,Done
+Charan chinni,Rameshbabu chinni,2013-01-18,11,male,CBSE,7,C,India,9980530033,ramesh.chinni@gmail.com,India09980530033,Pending
 Deborah Joy,Neelopher Tupper,2016-04-09,8,female,OTHR,3,A,India,8147455970,tneelopher@gmail.com,India08147455970,Pending
 MANAS C.K.,KASHI C.S. and PRIYA KASHI,2010-10-25,13,male,ICSE,9,C,91,9945146789,kashiamphora@gmail.com,919945146789,Pending
 Eliyanah Ravi,Sowmya M,2019-02-07,5,female,CBSE,1,2,91,9620950674,seshadri.soumya@gmail.com,919620950674,Pending
-Mohammed Ali Razeen,Abdul Rahiman p,2016-10-11,7,male,CBSE,2,C,91,9645921213,tachirhmn143@gmail.com,919645921213,Pending
+Mohammed Ali Razeen,Abdul Rahiman p,2016-10-11,8,male,CBSE,2,C,91,9645921213,tachirhmn143@gmail.com,919645921213,Pending
 Manish.M,C.Murali,2008-12-17,15,male,ICSE,10,C,91,9535197010,manishmurli655@gmail.com,919535197010,Pending
 S.A. Maria Angela Amelia,Maliena Amalraj,2012-01-03,12,female,ICSE,7,B,91,9916324395,maliena@rediffmail.com,919916324395,Pending
 Ethan Fernandes,Michelle Fernandes,2010-08-26,14,male,ICSE,8,B,91,9945358933,michellejenifer22@gmail.com,919945358933,Pending
-Maanvi R.K,Lalitha,2012-04-04,12,female,CBSE,7,B,91,9008518823,rajeshpoojary5823@gmail.com,919008518823,Pending
+Maanvi R.K,Lalitha,2012-04-04,12,female,CBSE,7,B,91,9008518823,rajeshpoojary5823@gmail.com,919008518823,Done
 Shanwil viyon d Souza,Salma d Souza,2012-03-22,12,male,CBSE,7,C,91,6364616134,shanwilviyon22@gmail.com,916364616134,Pending
 Natanya Ann Massey,Deepa Thomas,2010-05-28,14,female,ICSE,9,C,91,9945173724,deepathom1985@gmail.com,919945173724,Pending
 Sam Krish.P,Prasanth/Deepika,2013-05-12,11,male,OTHR,6,A,Mother,9944035104,deepikadp1993@gmail.com,Mother9944035104,Pending
 Kanmani,Prasanth/Deepika,2014-06-09,10,female,OTHR,5,A,Mother,9944035104,deepikadp1993@gmail.com,Mother9944035104,Pending
-Yaadvi.M,Mamatha. N,2013-01-10,11,female,ICSE,6,B,91,9880847937,mamathamanju2982@gmail.com,919880847937,Done
+Yaadvi.M,Mamatha. N,2013-01-10,11,female,ICSE,6,B,91,9880847937,mamathamanju2982@gmail.com,919880847937,Pending
 Arthana,Sushma,2016-03-01,8,female,ICSE,3,G,91,8073715854,praveenappi9675@gmail.com,918073715854,Pending
 Yashika. M,Mamatha. N,2013-01-10,11,female,ICSE,6,B,91,9880847937,mamathamanju2982@gmail.com,919880847937,Pending
 Arthana,Sushma,2016-03-01,8,female,ICSE,3,G,91,8073715854,praveenappi9675@gmail.com,918073715854,Pending
 Aneesha p.s,Sathish,2009-04-19,15,female,CBSE,10,A,91,9844277623,sathishaneesha39@gmail.com,919844277623,Pending
+Arthana,Sushma,2016-03-01,8,female,ICSE,3,G,91,8073715854,praveenappi9675@gmail.com,918073715854,Pending
 Preeti Anwesha,Jeebanjyoti & Sonalika,2010-01-10,14,female,CBSE,9,C,91,9916015751,sonalika123@gmail.com,919916015751,Pending
 Ibrahim faaz,Nusrath Farooq,2013-08-16,11,male,CBSE,5,A,91,9742617675,nusrathnusrath226@gmail.com,919742617675,Pending
 BOPANNA CP,KISHU PONNAPPA,2008-10-08,16,male,SSLC,10,A,91,9986289018,chillvandakishu@gmail.com,919986289018,Pending
@@ -49,7 +50,6 @@ Venessa Nethania james,Ranjini James,2016-05-09,8,female,ICSE,3,D,91,7348826134,
 Muhammad Aariz Shariff,Ayesha Sharieff,2017-07-24,7,male,ICSE,1,B,91,7022948536,ayesha1994shariff@icloud.com,917022948536,Pending
 SAHASRA VAIDYULA,NAREN VAIDYULA,2007-11-18,16,female,CBSE,12,B,91,9620139990,nvaidyula@gmail.com,919620139990,Pending
 AKSHARA VAIDYULA,NAREN VAIDYULA,2009-10-02,15,female,CBSE,10,B,91,9620139990,nvaidyula@gmail.com,919620139990,Pending
-Sahasra Vaidyula,Naren Vaidyula,2007-11-18,16,female,CBSE,12,B,91,9620139990,nvaidyula@gmail.com,919620139990,Pending
 Pavithra S,C Mary Shalini judy,2014-06-08,10,female,OTHR,5,B,India,7829606042,shalu.pavi1986@gmail.com,India07829606042,Pending
 S.Navyashree,R.Sathush Kumar,2011-01-01,13,female,CBSE,8,A,India,9901068818,sathishkumar38th@gmail.com,India09901068818,Pending
 Denny Onesimas,Anitha Ravi,2014-03-29,10,male,OTHR,5,A,91,8050891794,samuelsamraj@gmail.com,918050891794,Pending
@@ -58,3 +58,29 @@ SAMARTH SUVARNA,RANJINI SUVARNA,2017-12-07,6,male,CBSE,1,A,91,9035007252,ranjini
 Samanta,samuel,2015-09-22,9,female,ICSE,3,B,91,7899909470,antohepzy.x@gmail.com,917899909470,Pending
 Garv Chaudhary,Gaurav chaudhary,2019-07-02,5,male,OTHR,1,B,Mo,7250613830,jollyjaiswal@gmail.com,Mo7250613830,Pending
 Ira,Raksha,2019-09-25,5,female,ICSE,0,A,91,7032077737,raoraksha@gmail.com,917032077737,Pending
+ARAV LAWRENCE,Lawrence,2010-08-23,14,male,SSLC,8,A,91,9342826856,lawrencemahendan@gmail.com,919342826856,Done
+Viraj Singh,Pankaj Kumar Singh,2012-08-24,12,male,CBSE,7,C,91,8887589612,singhbindubalasingh@gmail.com,918887589612,Done
+Saatvik Sai L,Navyashree AR,2018-07-04,6,male,CBSE,1,A,India,9663061055,shreenavya2014@gmail.com,India09663061055,Done
+Sharanya Srivastava,Bhavana Srivastava,2013-03-15,11,female,CBSE,7,B,91,9839241239,bsaxena2007@gmail.com,919839241239,Done
+Aarohi Srivastava,Arpan Srivastava,2012-05-26,12,female,CBSE,7,B,91,9371641981,arpan.srvstv@gmail.com,919371641981,Pending
+Norah Jaan Shinto,Shinto K A,2009-01-28,15,female,SSLC,10,C,H,9074377513,Jancyfrancis14@gmail.com,H9074377513,Done
+George Allen,John Chettu,2015-02-08,9,male,OTHR,5,A,India,6366030951,annieeuodia@gmail.com,India6366030951,Done
+Allison Grace,John Chettu,2016-06-21,8,female,OTHR,3,A,India,6366030951,annieeuodia@gmail.com,India6366030951,Done
+Dheeran Imanuel Nathan,Devi Priya,2017-12-19,6,male,ICSE,1,C,India,9844827276,prvcreativespace@gmail.com,India09844827276,Pending
+Maria Swathi Caltin,Febian M Caltin,2011-07-25,13,female,ICSE,7,B,91,9343830582,swathimcaltin@gmail.com,919343830582,Pending
+Akshita Vats,Ruchi Vatsa,2011-09-18,13,female,CBSE,7,B,91,9616722000,P4.vatsa@gmail.com,919616722000,Pending
+Joshua Luke Fernandez,Pearl Andrea Fernandez,2015-01-01,9,male,OTHR,4,A,91,9743286605,allpearlsin@gmail.com,919743286605,Done
+Hannah Maria Fernandez,Pearl Andrea Fernandez,2016-05-30,8,female,OTHR,3,A,91,9743286605,allpearlsin@gmail.com,919743286605,Pending
+Pete Andre Fernandez,Pearl Andrea Fernandez,2018-10-08,6,male,ICSE,1,B,91,9743286605,allpearlsin@gmail.com,919743286605,Pending
+Keziah Clare,Patrick & Vinitha,2017-08-11,7,female,ICSE,1,A,0,9663244336,vinithawedspatrick@gmail.com,9663244336,Pending
+Lita Sara khader,irfath fathima,2010-10-29,13,female,OTHR,8,A,91,9632529368,abdulkhaderlifalissanliyan@gmail.com,919632529368,Pending
+Eunice Maura Fernandes,Jasmine Divya Pinto,2014-02-20,10,female,CBSE,5,F,91,9900591706,jasminedpinto@gmail.com,919900591706,Pending
+Rohan Murali,Murali,2014-10-07,10,male,ICSE,4,C,India,9538703355,bibi.tresa@gmail.com,India9538703355,Done
+Rohit Murali,Murali,2014-10-07,10,male,ICSE,4,C,India,9538703355,bibi.tresa@gmail.com,India09538703355,Done
+Maulya. M,Brijesh,2015-03-05,9,female,CBSE,4,C,91,8904316510,anithaa463@gmail.com,918904316510,Done
+Beatrice Melissa,Bina,2014-05-14,10,female,ICSE,5,C,91,7760365873,binamelvin1986@gmail.com,917760365873,Pending
+Shiloh Camelia Raj,Cynthia Raj,2011-10-21,12,female,ICSE,7,A,91,6361794869,cynthia21raj@gmail.com,916361794869,Done
+Alina Rizvi,Himani Rizvi,2012-03-09,12,female,CBSE,7,B,9792111129,9792111129,himanirizvi.08@gmail.com,97921111299792111129,Pending
+Maximus Joshua. D Jessica Tabitha. D Mikheal Paul. D,"Nalini, David",2010-09-22,14,male,OTHR,9123456,9,91,9740698047,nalinidavid147@gmail.com,919740698047,Pending
+Jessica Tabitha. D,"Nalini, David",2013-12-11,10,female,OTHR,912345,6,91,9740698047,nalinidavid147@gmail.com,919740698047,Pending
+Mikheal Paul. D,"Nalini, David",2018-08-18,6,male,OTHR,912345,3,91,9740698047,nalinidavid147@gmail.com,919740698047,Pending
