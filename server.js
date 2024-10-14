@@ -408,6 +408,127 @@ app.get("/admin-little-artist-submissions", (req, res) => {
   });
 });
 
+app.get("/admin-little-artist-submissions-table", (req, res) => {
+  const results = [];
+
+  // Read the CSV file
+  fs.createReadStream("data/image-ref-registrations.csv")
+    .pipe(csv())
+    .on("data", (data) => results.push(data))
+    .on("end", () => {
+      // Initial unsorted table rows
+      let tableRows = results
+        .map(
+          (row) => `
+          <tr>
+            <td>${row["Child Name"]}</td>
+            <td>${row["Parent Name"]}</td>
+            <td>${row["Date of Birth"]}</td>
+            <td>${row["Age"]}</td>
+            <td>${row["Gender"]}</td>
+            <td>${row["Education Board"]}</td>
+            <td>${row["Grade"]}</td>
+            <td>${row["Section"]}</td>
+            <td>${row["Country Code"]}</td>
+            <td>${row["Phone Number"]}</td>
+            <td>${row["Email"]}</td>
+            <td>${row["Registration ID"]}</td>
+            <td>${row["Submission-Status"]}</td>
+          </tr>`
+        )
+        .join("");
+
+      // Send the full HTML page with a sort feature
+      res.send(`
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>CSV Data - Little Artist Submissions</title>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              margin: 20px;
+            }
+            table {
+              width: 100%;
+              border-collapse: collapse;
+              margin-top: 20px;
+            }
+            table, th, td {
+              border: 1px solid black;
+            }
+            th, td {
+              padding: 10px;
+              text-align: left;
+            }
+            th {
+              background-color: #f2f2f2;
+              cursor: pointer;
+            }
+            th:hover {
+              background-color: #e2e2e2;
+            }
+          </style>
+        </head>
+        <body>
+          <h1>Little Artist Submissions - CSV Data</h1>
+          <table id="csvTable">
+            <thead>
+              <tr>
+                <th>Child Name</th>
+                <th>Parent Name</th>
+                <th>Date of Birth</th>
+                <th>Age</th>
+                <th>Gender</th>
+                <th>Education Board</th>
+                <th>Grade</th>
+                <th>Section</th>
+                <th>Country Code</th>
+                <th>Phone Number</th>
+                <th>Email</th>
+                <th>Registration ID</th>
+                <th onclick="sortTable()">Submission Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${tableRows}
+            </tbody>
+          </table>
+
+          <script>
+            let sortDirection = true; // true = ascending, false = descending
+
+            function sortTable() {
+              const table = document.getElementById('csvTable').tBodies[0];
+              const rows = Array.from(table.rows);
+
+              rows.sort((rowA, rowB) => {
+                const statusA = rowA.cells[12].innerText.toLowerCase();
+                const statusB = rowB.cells[12].innerText.toLowerCase();
+
+                if (sortDirection) {
+                  return statusA.localeCompare(statusB); // Ascending
+                } else {
+                  return statusB.localeCompare(statusA); // Descending
+                }
+              });
+
+              // Re-append rows in the sorted order
+              rows.forEach(row => table.appendChild(row));
+
+              // Toggle the sort direction for the next click
+              sortDirection = !sortDirection;
+            }
+          </script>
+        </body>
+        </html>
+      `);
+    });
+});
+
+
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
