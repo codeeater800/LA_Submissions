@@ -1,6 +1,4 @@
 Child Name,Parent Name,Date of Birth,Age,Gender,Education Board,Grade,Section,Country Code,Phone Number,Email,Registration ID,Submission-Status
-John,Doe,2016-02-02,8,male,SSLC,2,A,91,9999899998,hi@gmail.com,919999899998,Pending
-Adam,Gilchrist,2012-02-02,12,male,ICSE,2,A,63,9988766765,adam@gmail.com,639988766765,Pending
 Genessa Caltin,Rupa L,2016-02-12,8,female,ICSE,3,C,91,9900112912,rupa.caltin@gmail.com,919900112912,Pending
 Joanna Anson,Swapna varghese,2012-08-31,12,female,ICSE,7,A,91,9379632227,swapnaanson@gmail.com,919379632227,Pending
 Bhoovi S Baadkar,Suraj R Baadkar,2012-02-17,12,female,ICSE,7,B,91,9902284442,meerabadkar@gmail.com,919902284442,Pending
@@ -84,3 +82,9 @@ Alina Rizvi,Himani Rizvi,2012-03-09,12,female,CBSE,7,B,9792111129,9792111129,him
 Maximus Joshua.,"Nalini, David",2010-09-22,14,male,OTHR,9123456,9,91,9740698047,nalinidavid147@gmail.com,919740698047,Pending
 Jessica Tabitha. D,"Nalini, David",2013-12-11,10,female,OTHR,912345,6,91,9740698047,nalinidavid147@gmail.com,919740698047,Pending
 Mikheal Paul. D,"Nalini, David",2018-08-18,6,male,OTHR,912345,3,91,9740698047,nalinidavid147@gmail.com,919740698047,Pending
+Latisha Sharon R,Malarkodi B,2013-06-06,11,male,SSLC,1,V,80,9538620517,malarbenito@gmail.com,809538620517,Pending
+Lekhan.L.,Lohith.T.N.,2019-06-01,5,male,CBSE,1,L,91,9880375187,lohith21mangalore@gmail.com,919880375187,Pending
+Reyanshi singh,Rashmi gokul,2017-01-31,7,female,CBSE,1,A,91,9559369990,rashmirajan85@gmail.com,919559369990,Pending
+Agrima singh,Rashmi gokul,2014-04-29,10,female,CBSE,5,A,91,9559369990,rashmirajan85@gmail.com,919559369990,Pending
+Alphonsa Jenifer,Helen /Vimal,2011-09-25,13,female,OTHR,8,B,Alphonsa,9538612434,ap5624357@gmail.com,Alphonsa9538612434,Pending
+Thakur Utkarsh Singh,Soni Singh,2014-02-15,10,male,CBSE,5,B,91,9532415515,sonisinghdikshitit@gmail.com,919532415515,Pending
