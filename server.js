@@ -147,6 +147,7 @@ app.post("/upload-image", (req, res) => {
     } else if (age >= 13 && age <= 15) {
       categoryDir = "public/uploads/category3";
     }
+    
 
     // Log the calculated category for debugging
     console.log(
