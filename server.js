@@ -14,10 +14,11 @@ const PORT = process.env.PORT || 3000;
 
 let latestAgeCategory = null; // Store the latest category based on age
 
-// Authorize using the service account
+// Load service account credentials from environment variable
 function authorizeServiceAccount() {
+  const serviceAccount = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON);
   const auth = new google.auth.GoogleAuth({
-    keyFile: SERVICE_ACCOUNT_FILE,
+    credentials: serviceAccount,
     scopes: ["https://www.googleapis.com/auth/drive.file"],
   });
   return auth;
