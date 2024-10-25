@@ -4,11 +4,48 @@ const path = require("path");
 const fs = require("fs");
 const csv = require("csv-parser");
 const createCsvWriter = require("csv-writer").createObjectCsvWriter;
+const { google } = require("googleapis");
+
+const SERVICE_ACCOUNT_FILE = path.join(__dirname, "service-account.json");
+const DRIVE_FOLDER_ID = "1g3kzdcoHN-Fzh0CvCgrVGmZJaevtUxMD";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 let latestAgeCategory = null; // Store the latest category based on age
+
+// Authorize using the service account
+function authorizeServiceAccount() {
+  const auth = new google.auth.GoogleAuth({
+    keyFile: SERVICE_ACCOUNT_FILE,
+    scopes: ["https://www.googleapis.com/auth/drive.file"],
+  });
+  return auth;
+}
+
+// Upload file to Google Drive
+async function uploadToDrive(auth, filePath, fileName) {
+  const drive = google.drive({ version: "v3", auth });
+  const fileMetadata = {
+    name: fileName,
+    parents: [DRIVE_FOLDER_ID],
+  };
+  const media = {
+    mimeType: "image/jpeg", // Adjust the MIME type as needed
+    body: fs.createReadStream(filePath),
+  };
+
+  try {
+    const response = await drive.files.create({
+      requestBody: fileMetadata,
+      media: media,
+      fields: "id",
+    });
+    console.log(`File uploaded to Google Drive with ID: ${response.data.id}`);
+  } catch (error) {
+    console.error("Error uploading to Google Drive:", error.message);
+  }
+}
 
 // Middleware to serve static files
 app.use(express.static("public"));
@@ -105,7 +142,8 @@ app.get("/check-email", (req, res) => {
       } else {
         res.json({
           success: false,
-          message: "Email not found. \nIf you have registered today, we are processing your registration. Please try again tomorrow.",
+          message:
+            "Email not found. \nIf you have registered today, we are processing your registration. Please try again tomorrow.",
         });
       }
     });
@@ -129,15 +167,12 @@ app.post("/upload-image", (req, res) => {
         .json({ error: "An error occurred during the upload." });
     }
 
-    const childName = req.body.childName; // Get child name from form data
-    const emailID = req.body.email; // Get email from form data
-    const age = parseInt(req.body.age, 10); // Get age from the form data
-    let categoryDir = "public/uploads"; // Default directory
+    const childName = req.body.childName;
+    const emailID = req.body.email;
+    const age = parseInt(req.body.age, 10);
+    let categoryDir = "public/uploads";
 
-    // Log email to verify it's being passed correctly
     console.log("Email ID received:", emailID);
-
-    name = "email";
 
     // Determine the category based on the age
     if (age >= 5 && age <= 8) {
@@ -147,41 +182,46 @@ app.post("/upload-image", (req, res) => {
     } else if (age >= 13 && age <= 15) {
       categoryDir = "public/uploads/category3";
     }
-    
 
-    // Log the calculated category for debugging
     console.log(
       `Calculated category group based on age ${age}: ${categoryDir}`
     );
     console.log(`Age: ${age} mapped to category directory: ${categoryDir}`);
 
-    // Ensure the directory exists before moving the file
     if (!fs.existsSync(categoryDir)) {
       fs.mkdirSync(categoryDir, { recursive: true });
     }
 
-    // Create a file name in the format "<childName> <-> <emailID><extension>" without any sanitization
-    const fileExtension = path.extname(req.file.originalname); // Get the file extension
-    const newFileName = `${childName} - ${emailID}${fileExtension}`; // Use the raw child name and email for the file name
-
-    // Move the file to the correct directory based on age category
+    const fileExtension = path.extname(req.file.originalname);
+    const newFileName = `${childName} - ${emailID}${fileExtension}`;
     const oldPath = req.file.path;
     const newPath = path.join(__dirname, categoryDir, newFileName);
+
     fs.rename(oldPath, newPath, function (err) {
       if (err) {
         return res.status(500).json({ error: "Failed to move the file." });
       }
 
-      // Logging the file upload path
+      console.log(`File saved in Render storage at ${newPath}`);
       console.log(`Upload successful: ${newPath}`);
 
-      // Now update the CSV file for submission status
+      // Initiate Google Drive upload in the background
+      (async () => {
+        try {
+          const auth = authorizeServiceAccount();
+          await uploadToDrive(auth, newPath, newFileName);
+          console.log(`File uploaded to Google Drive: ${newFileName}`);
+        } catch (error) {
+          console.error("Error uploading to Google Drive:", error.message);
+        }
+      })();
+
+      // Continue with CSV update
       const results = [];
       fs.createReadStream("data/image-ref-registrations.csv")
         .pipe(csv())
         .on("data", (data) => results.push(data))
         .on("end", () => {
-          // Find the entry for the child and mark the submission as "Done"
           const updatedResults = results.map((entry) => {
             if (
               entry["Child Name"].trim().toLowerCase() ===
@@ -192,7 +232,6 @@ app.post("/upload-image", (req, res) => {
             return entry;
           });
 
-          // Write the updated data back to the CSV
           updateCSV(updatedResults)
             .then(() => {
               console.log(
@@ -200,12 +239,18 @@ app.post("/upload-image", (req, res) => {
               );
               console.log("Upload process completed successfully.");
 
-              res.status(200).json({ success: true });
+              // Send response after CSV update is done, ensuring it’s only called once
+              if (!res.headersSent) {
+                res.status(200).json({ success: true });
+              }
             })
             .catch((error) => {
-              res
-                .status(500)
-                .json({ error: "Failed to update submission status." });
+              console.error("Failed to update submission status:", error);
+              if (!res.headersSent) {
+                res
+                  .status(500)
+                  .json({ error: "Failed to update submission status." });
+              }
             });
         });
     });
@@ -527,7 +572,6 @@ app.get("/admin-little-artist-submissions-table", (req, res) => {
       `);
     });
 });
-
 
 // Start the server
 app.listen(PORT, () => {
