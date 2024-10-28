@@ -144,7 +144,7 @@ app.get("/check-email", (req, res) => {
         res.json({
           success: false,
           message:
-            "Email not found. \nIf you have registered today, we are processing your registration. Please try again tomorrow.",
+            "Email not found. \nPlease check your email (Use the same email you used to register)",
         });
       }
     });
