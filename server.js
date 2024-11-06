@@ -258,8 +258,14 @@ app.post("/upload-image", (req, res) => {
   });
 });
 
+process.env.DISABLE_ROUTES = "true";
+
 // Admin page for viewing gallery with category selection
 app.get("/admin-little-artist-submissions", (req, res) => {
+  if (process.env.DISABLE_ROUTES === "true") {
+    return res.status(503).send("Service temporarily unavailable");
+  }
+
   const ageGroup = req.query.ageGroup || "category1"; // Default to category1 if no age group is selected
   const uploadDir = path.join(__dirname, `public/uploads/${ageGroup}`);
 
@@ -455,6 +461,9 @@ app.get("/admin-little-artist-submissions", (req, res) => {
 });
 
 app.get("/admin-little-artist-submissions-table", (req, res) => {
+  if (process.env.DISABLE_ROUTES === "true") {
+    return res.status(503).send("Service temporarily unavailable");
+  }
   const results = [];
 
   // Read the CSV file
