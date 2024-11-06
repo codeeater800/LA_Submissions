@@ -3,51 +3,43 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Little Artist Submissions</title>
-    <link rel="stylesheet" href="css/styles.css" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap"
-      rel="stylesheet"
-    />
+    <title>Service Unavailable</title>
+    <style>
+      body {
+        background-color: #824cad;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        font-family: Arial, sans-serif;
+        color: #ffffff;
+      }
+      .message-box {
+        text-align: center;
+        padding: 20px;
+        background-color: #ffffff;
+        color: #824cad;
+        border-radius: 10px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        max-width: 400px;
+      }
+      .message-box h1 {
+        font-size: 24px;
+        margin: 0;
+        font-weight: bold;
+      }
+      .message-box p {
+        font-size: 16px;
+        margin: 10px 0 0;
+        font-weight: 400;
+      }
+    </style>
   </head>
   <body>
-    <div class="container">
+    <div class="message-box">
       <h1>Little Artist Submissions</h1>
-      <div id="step1">
-        <label for="email">Enter your registered email:</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          placeholder="example@email.com"
-          required
-        />
-        <button id="emailSubmit">Submit</button>
-        <p id="emailError" class="error-message"></p>
-      </div>
-
-      <div id="step2" class="hidden">
-        <h2>Uploading for '<span id="childName"></span>'</h2>
-        <div id="dragDropArea">
-          <p>
-            Drag & drop your image here, or
-            <span class="browse-files">browse files</span>
-          </p>
-          <input type="file" id="fileInput" accept="image/*" />
-        </div>
-        <div id="previewContainer" class="hidden">
-          <h3>Preview:</h3>
-          <img id="preview" src="" alt="Image preview" />
-          <button id="confirmUpload">Confirm Upload</button>
-        </div>
-        <p id="uploadError" class="error-message"></p>
-      </div>
-
-      <div id="confirmation" class="hidden">
-        <h2>Upload complete! Thank you!</h2>
-      </div>
+      <p>Service temporarily unavailable, please contact admin</p>
     </div>
-
-    <script src="js/script.js"></script>
   </body>
 </html>
